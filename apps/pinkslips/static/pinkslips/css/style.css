@@ -1,0 +1,60 @@
+body {
+	background-color: #fdf3eb;
+}
+
+.navbar {
+	border: none;
+	background-color: transparent;
+}
+
+.centerlogo {
+	text-align: center;
+}
+
+.half {
+	width: 50%;
+	margin-bottom: 20%;
+}
+
+}
+.top {
+	padding-top: 10px;
+}
+
+.row {
+	display: flex;
+}
+
+.column {
+	flex: 50%;
+    padding: 10px;
+}
+
+.marg {
+	margin-left: 10px;
+}
+
+.right {
+	width: 100%;
+}
+
+.imgdiv {
+	max-width: 70%;
+	display: inline-block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.img {
+	max-width: 80%;
+	display: inline;
+	height: auto;
+}
+
+.error {
+	color: red;
+}
+
+.toright {
+	float: right;
+}

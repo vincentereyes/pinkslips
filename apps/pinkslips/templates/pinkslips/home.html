@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>pinkslips</title>
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	 {% load static %}
+	 <link rel="stylesheet" href="{% static 'pinkslips/css/style.css' %}" media="screen" title="no title"  charset="utf-8">
+</head>
+<body>
+<div class="container">
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <p class="navbar-brand">
+	      	<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+	      </p>
+	      <p class="navbar-brand">
+	      	<a href="/profile">{{ user.username }}</a>
+	      </p>
+	      <p class="navbar-brand">
+	      	<a href="/matches">matches({{ request.session.num }})</a>
+	      </p>
+	      <p class="navbar-brand">
+	      	<a href="/edit">edit profile</a>
+	      </p>
+	    </div>
+	    <p class="navbar-brand navbar-right"><a href="/logout" class="navbar-link">logout</a></p>
+	  </div>
+	</nav>
+	<div class="container centerlogo">
+		<div class="imgdiv">
+
+			<img src="{{ opponent.url }}" alt="gtr" class="img">
+
+		</div>
+		<h5>username: {{ opponent.username }}</h5>
+	</div>
+	<div class="row">
+		<div class="column centerlogo">
+			<a href="/dislike"><button class="btn btn-danger right"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></button></a>
+		</div>
+		<div class="column centerlogo">
+			<a href="/like"><button class="btn btn-success right"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></button></span></a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="column">
+			<p>year: {{ opponent.year }}</p>
+			<p>make: {{ opponent.make }}</p>
+			<p>model: {{ opponent.model }}</p>
+		</div>
+		<div class="column">
+			<p>power: {{ opponent.power }} hp</p>
+			<p>weight: {{ opponent.weight }} lbs</p>
+			<p>drivetrain: {{ opponent.dtrain }}</p>
+		</div>
+	</div>
+	<div style="height: 400px;">
+		<p>description: </p>
+		<p class="text-center">{{ opponent.desc }}</p>
+	</div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

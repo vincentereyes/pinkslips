@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>matches</title>
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	 {% load static %}
+	 <link rel="stylesheet" href="{% static 'pinkslips/css/style.css' %}" media="screen" title="no title"  charset="utf-8">
+</head>
+<body>
+<div class="container">
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <p class="navbar-brand">
+	      	<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+	      </p>
+	      <p class="navbar-brand">
+	      	<a href="/home">home</a>
+	      </p>
+	    </div>
+	    <p class="navbar-brand navbar-right"><a href="/logout" class="navbar-link">logout</a></p>
+	  </div>
+	</nav>
+	<div class="container">
+		<h3>matches</h3>
+		<table class="table">
+			<thead class="thead-default">
+    			<tr>
+      				<th>username</th>
+      				<th>year</th>
+      				<th>make</th>
+      				<th>model</th>
+      				<th>weight</th>
+      				<th>power</th>
+      				<th>drivetrain</th>
+    			</tr>
+
+    			{% for convo in convo %}
+    			<tr>
+    				{% if convo.speaker1.username == user.username %}
+						<td><a href="thread/{{ convo.id }}">{{ convo.speaker2.username }}</a></td>
+					{% else %}
+						<td><a href="thread/{{ convo.id }}">{{ convo.speaker1.username }}</a></td>
+					{% endif %}
+					{% if convo.speaker1.username == user.username %}
+						<td>{{ convo.speaker2.year }}</td>
+					{% else %}
+						<td>{{ convo.speaker1.year }}</td>
+					{% endif %}
+					{% if convo.speaker1.username == user.username %}
+						<td>{{ convo.speaker2.make }}</td>
+					{% else %}
+						<td>{{ convo.speaker1.make }}</td>
+					{% endif %}
+					{% if convo.speaker1.username == user.username %}
+						<td>{{ convo.speaker2.model }}</td>
+					{% else %}
+						<td>{{ convo.speaker1.model }}</td>
+					{% endif %}
+					{% if convo.speaker1.username == user.username %}
+						<td>{{ convo.speaker2.weight }}</td>
+					{% else %}
+						<td>{{ convo.speaker1.weight }}</td>
+					{% endif %}
+					{% if convo.speaker1.username == user.username %}
+						<td>{{ convo.speaker2.power }}</td>
+					{% else %}
+						<td>{{ convo.speaker1.power }}</td>
+					{% endif %}
+					{% if convo.speaker1.username == user.username %}
+						<td>{{ convo.speaker2.dtrain }}</td>
+					{% else %}
+						<td>{{ convo.speaker1.dtrain }}</td>
+					{% endif %}
+				</tr>
+				{% endfor %}
+  			</thead>
+		</table>
+	</div>
+</div>
+</body>
+</html>

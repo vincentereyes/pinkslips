@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>edit profile</title>
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	 {% load static %}
+	 <link rel="stylesheet" href="{% static 'pinkslips/css/style.css' %}" media="screen" title="no title"  charset="utf-8">
+</head>
+<body>
+<div class="container">
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <p class="navbar-brand">
+	      	<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+	      </p>
+	      <p class="navbar-brand">
+	      	<a href="/home">home</a>
+	      </p>
+	      <p class="navbar-brand">
+	      	<a href="/matches">matches({{ request.session.num }})</a>
+	      </p>
+	    </div>
+	    <p class="navbar-brand navbar-right"><a href="/logout" class="navbar-link">logout</a></p>
+	  </div>
+	</nav>
+	<div><h2>edit profile</h2></div>
+	<div class="centerlogo">
+			<h4>car info</h4>
+			{% if messages %}
+	  			<ul class="messages">
+	    			{% for message in messages %}
+	    				<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    			{% endfor %}
+	  			</ul>
+  			{% endif %}
+		</div>
+		<div class="row">
+			<div class="column">
+				<form action="/upload" method="post">
+					{% csrf_token %}
+				<div class="form-group">
+					<label>image url</label>
+					<input type="text" name="pic" class="form-control">
+					<input type="submit" name="submit" class="btn btn-danger form-control" value="upload">
+				</div>
+				</form>
+		<form action="/update" method="post">
+					{% csrf_token %}
+				<input type="hidden" name="uid" value="{{ request.session.id }}">
+				<div class="form-group">
+					<label>description (modifications)</label>
+					<textarea  name="desc" class="form-control" rows="3"></textarea>
+				</div>
+			</div>
+			<div class="column">
+				<div class="form-group">
+					<label>year</label>
+					<input type="number" name="year" class="form-control">
+				</div>
+				<div class="form-group">
+					<label>make</label>
+					<input type="text" name="make" class="form-control">
+				</div>
+				<div class="form-group">
+					<label>model</label>
+					<input type="text" name="model" class="form-control">
+				</div>
+			</div>
+			<div class="column">
+				<div class="form-group">
+					<label>power in hp</label>
+					<input type="text" name="power" class="form-control">
+				</div>
+				<div class="form-group">
+					<label>weight in lbs</label>
+					<input type="text" name="weight" class="form-control">
+				</div>
+				<div class="form-group">
+					<label>drivetrain</label>
+					<select class="form-control" name="dtrain">
+						<option selected="selected">choose</option>
+  						<option>FWD</option>
+  						<option>RWD</option>
+  						<option>AWD/4WD</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="centerlogo"><input type="submit" name="submit" class="btn btn-danger" value="save"></div>
+	</form>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>conversation</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	 {% load static %}
+	 <link rel="stylesheet" href="{% static 'pinkslips/css/style.css' %}" media="screen" title="no title"  charset="utf-8">
+
+
+    <style>
+#myMap {
+   height: 350px;
+   width: 600px;
+}
+</style>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLp92Jf8nFFTmYCRKRD2xOXG2JTuVSOig&libraries=places&sensor=false"></script> 
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
+</script>
+<script type="text/javascript"> 
+var map;
+var marker;
+var myLatlng = new google.maps.LatLng({{ convo.longitude }}, {{ convo.latitude }});
+var geocoder = new google.maps.Geocoder();
+var infowindow = new google.maps.InfoWindow();
+function initialize(){
+var mapOptions = {
+zoom: 18,
+center: myLatlng,
+mapTypeId: google.maps.MapTypeId.ROADMAP
+};
+
+map = new google.maps.Map(document.getElementById("myMap"), mapOptions);
+
+marker = new google.maps.Marker({
+map: map,
+position: myLatlng,
+draggable: true 
+}); 
+
+geocoder.geocode({'latLng': myLatlng }, function(results, status) {
+if (status == google.maps.GeocoderStatus.OK) {
+if (results[0]) {
+$('#latitude,#longitude').show();
+$('#address').val(results[0].formatted_address);
+$('#latitude').val(marker.getPosition().lat());
+$('#longitude').val(marker.getPosition().lng());
+infowindow.setContent(results[0].formatted_address);
+infowindow.open(map, marker);
+}
+}
+});
+
+google.maps.event.addListener(marker, 'dragend', function() {
+
+geocoder.geocode({'latLng': marker.getPosition()}, function(results, status) {
+if (status == google.maps.GeocoderStatus.OK) {
+if (results[0]) {
+$('#address').val(results[0].formatted_address);
+$('#latitude').val(marker.getPosition().lat());
+$('#longitude').val(marker.getPosition().lng());
+infowindow.setContent(results[0].formatted_address);
+infowindow.open(map, marker);
+}
+}
+});
+});
+
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+</head>
+<body>
+<div class="container">
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <p class="navbar-brand">
+	      	<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+	      </p>
+	      <p class="navbar-brand">
+	      	<a href="/home">home</a>
+	      </p>
+	      <p class="navbar-brand">
+	      	<a href="/matches">matches({{ request.session.num }})</a>
+	      </p>
+	    </div>
+	    <p class="navbar-brand navbar-right"><a href="/logout" class="navbar-link">logout</a></p>
+	  </div>
+	</nav>
+	<div class="container">
+		<div class="centerlogo">
+			{% if convo.speaker1.username == user.username %}
+				<h3>you matched with {{ convo.speaker2.username }}!</h3>
+			{% else %}
+				<h3>you matched with {{ convo.speaker1.username }}!</h3>
+			{% endif %}
+		</div>
+		<div class="container">
+			{% for msg in msgs %}
+				<p{% if user.id == msg.sender.id %} class="text-right" {% endif%}>{{ msg.sender.username }} says:</p><p{% if user.id == msg.sender.id %} class="text-right" {% endif%}>{{ msg.content }}</p>
+				<hr>
+			{% endfor %}
+		</div>
+		<form action="/pstmsg" method="post">
+			{% csrf_token %}
+				<input type="hidden" name="tid" value="{{ convo.id }}">
+				<input type="hidden" name="uid" value="{{ request.session.id }}">
+				{% if messages %}
+  					<ul class="messages">
+    					{% for message in messages %}
+    						<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    					{% endfor %}
+  					</ul>
+  				{% endif %}
+				<div class="form-group">
+					<label>message</label>
+					<textarea  name="msg" class="form-control" rows="3"></textarea>
+				</div>
+				<input type="submit" name="submit" class="btn btn-danger form-control" value="send">
+		</form>
+<!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLp92Jf8nFFTmYCRKRD2xOXG2JTuVSOig&callback=initMap"
+  type="text/javascript"></script> -->
+ <div class="container centerlogo">
+ <form action="/savemap" method="post">
+ 	{% csrf_token %}
+	<div id="myMap" class="container"></div>
+	<input id="address" type="text" style="width:600px;"/><br/>
+	<input type="hidden" name="cid" value="{{ convo.id }}">
+	<input type="hidden" name="uid" value="{{ request.session.id }}">
+	<input type="hidden" name ="lat" id="latitude" placeholder="Latitude">
+	<input type="hidden" name ="long" id="longitude" placeholder="Longitude">
+	<input type="submit" name="submit" class="btn btn-danger form-control" value="save location">
+</form>
+</div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
