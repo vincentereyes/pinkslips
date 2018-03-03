@@ -15,59 +15,77 @@
 	      	<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
 	      </p>
 	      <p class="navbar-brand">
-	      	<a href="/home">home</a>
+	      	<a href="/home">Home</a>
 	      </p>
 	      <p class="navbar-brand">
-	      	<a href="/matches">matches({{ request.session.num }})</a>
+	      	<a href="/matches">Matches ({{ request.session.num }})</a>
 	      </p>
 	      <p class="navbar-brand">
-	      	<a href="/edit">edit profile</a>
+	      	<a href="/edit">Edit Profile</a>
 	      </p>
 	    </div>
-	    <p class="navbar-brand navbar-right"><a href="/logout" class="navbar-link">logout</a></p>
+	    <p class="navbar-brand navbar-right"><a href="/logout" class="navbar-link">Logout</a></p>
 	  </div>
 	</nav>
-	<div><h2>your profile</h2></div>
-	<div class="container centerlogo">
-		<div class="imgdiv">
-
-			<img src="{{ user.url }}" alt="gtr" class="img">
-
-		</div>
-	</div>
+	<div><h2>Your Profile</h2></div>
+	<div class="container ">
 	<div class="row">
 		<div class="column centerlogo">
 			<button class="btn btn-danger right" disabled><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></button>
 		</div>
 		<div class="column centerlogo">
-			<button class="btn btn-success right" disabled><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></button>
+			<button class="btn btn-success right" disabled><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
 		</div>
 	</div>
-	<div class="row">
-		<div class="column">
-			<p>year: {{ user.year }}</p>
-			<p>make: {{ user.make }}</p>
-			<p>model: {{ user.model }}</p>
+		<div class="row">
+
+			<div class="imgdiv centerlogo">
+
+			<img src="{{ user.url }}" alt="gtr" class="img">
+
 		</div>
 		<div class="column">
-			<p>power: {{ user.power }} hp</p>
-			<p>weight: {{ user.weight}} lbs</p>
-			<p>drivetrain: {{ user.dtrain }}</p>
+			<table class="table">
+			<thead>
+			  <tr>
+			    <th></th>
+			    <th></th>
+			  </tr>
+			</thead>
+			<tbody>
+			  <tr>
+			    <td>Year</td>
+			    <td>{{ user.year }}</td>
+			  </tr>
+			  <tr>
+			    <td>Make</td>
+			    <td>{{ user.make }}</td>
+			  </tr>
+			  <tr>
+			    <td>Model</td>
+			    <td>{{ user.model }}</td>
+			  </tr>
+			  <tr>
+			    <td>Power</td>
+			    <td>{{ user.power }} hp</td>
+			  </tr>
+			  <tr>
+			    <td>Weight</td>
+			    <td>{{ user.weight}} lbs</td>
+			  </tr>
+			  <tr>
+			    <td>Drivetrain</td>
+			    <td>{{ user.dtrain }}</td>
+			  </tr>
+			</tbody>
+			</table>
+			<div>
+				<p>Description: </p>
+				<p class="text-center">{{ user.desc }}</p>
+			</div>
 		</div>
 	</div>
-	<div>
-		<p>description: </p>
-		<p class="text-center">{{ user.desc }}</p>
 	</div>
 </div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-

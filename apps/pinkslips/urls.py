@@ -19,5 +19,6 @@ urlpatterns = [
 	url(r'^thread/(?P<tid>\d+)$', views.thread),
 	url(r'^pstmsg$', views.pstmsg),
 	url(r'^savemap$', views.savemap),
-	url(r'^upload$', views.upload)
+	url(r'^upload$', views.upload),
+	url(r'^cartest$', views.cartest),
 ]

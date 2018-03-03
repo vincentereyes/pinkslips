@@ -218,3 +218,14 @@ def savemap(request):
 
 
 
+
+
+
+
+
+
+
+
+
+def cartest(request):
+	return render (request, 'pinkslips/car.html')
