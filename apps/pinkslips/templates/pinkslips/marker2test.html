@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>conversation</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	 {% load static %}
+	 <link rel="stylesheet" href="{% static 'pinkslips/css/style.css' %}" media="screen" title="no title"  charset="utf-8">
+
+
+    <style>
+#myMap {
+   height: 350px;
+   width: 600px;
+}
+</style>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLp92Jf8nFFTmYCRKRD2xOXG2JTuVSOig&libraries=places&sensor=false"></script> 
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
+</script>
+<script type="text/javascript"> 
+var map;
+var marker;
+var myLatlng = new google.maps.LatLng({{ convo.longitude }}, {{ convo.latitude }});
+var myLatlng2 = new google.maps.LatLng({{ convo.longitude2 }}, {{ convo.latitude2 }});
+var geocoder = new google.maps.Geocoder();
+var infowindow = new google.maps.InfoWindow();
+var directionsDisplay;
+var directionsService = new google.maps.DirectionsService();
+function initialize(){
+directionsDisplay = new google.maps.DirectionsRenderer();
+var mapOptions = {
+zoom: 18,
+center: myLatlng,
+mapTypeId: google.maps.MapTypeId.ROADMAP
+};
+
+map = new google.maps.Map(document.getElementById("myMap"), mapOptions);
+
+// directionsDisplay.setMap(map);
+// google.maps.event.addListener(document.getElementById('routebtn'), 'click', calcRoute);
+
+
+
+
+marker = new google.maps.Marker({
+map: map,
+label : "A",
+position: myLatlng,
+draggable: true 
+});
+
+marker2 = new google.maps.Marker({
+map: map,
+label : "B",
+position: myLatlng2,
+draggable: true 
+}); 
+
+var markers = [marker, marker2];
+var bounds = new google.maps.LatLngBounds();
+for (var i = 0; i < markers.length; i++) {
+ bounds.extend(markers[i].getPosition());
+}
+
+map.fitBounds(bounds);
+
+geocoder.geocode({'latLng': myLatlng }, function(results, status) {
+if (status == google.maps.GeocoderStatus.OK) {
+if (results[0]) {
+$('#latitude,#longitude').show();
+$('#address').val(results[0].formatted_address);
+$('#latitude').val(marker.getPosition().lat());
+$('#longitude').val(marker.getPosition().lng());
+// infowindow.setContent(results[0].formatted_address);
+// infowindow.open(map, marker);
+}
+}
+});
+
+google.maps.event.addListener(marker, 'dragend', function() {
+
+geocoder.geocode({'latLng': marker.getPosition()}, function(results, status) {
+if (status == google.maps.GeocoderStatus.OK) {
+if (results[0]) {
+$('#address').val(results[0].formatted_address);
+$('#latitude').val(marker.getPosition().lat());
+$('#longitude').val(marker.getPosition().lng());
+myLatlng = new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
+initialize();
+// infowindow.setContent(results[0].formatted_address);
+// infowindow.open(map, marker);
+}
+}
+});
+});
+
+geocoder.geocode({'latLng': myLatlng }, function(results, status) {
+if (status == google.maps.GeocoderStatus.OK) {
+if (results[0]) {
+$('#latitude2,#longitude2').show();
+$('#address').val(results[0].formatted_address);
+$('#latitude2').val(marker2.getPosition().lat());
+$('#longitude2').val(marker2.getPosition().lng());
+// infowindow.setContent(results[0].formatted_address);
+// infowindow.open(map, marker2);
+
+}
+}
+});
+
+google.maps.event.addListener(marker2, 'dragend', function() {
+
+geocoder.geocode({'latLng': marker2.getPosition()}, function(results, status) {
+if (status == google.maps.GeocoderStatus.OK) {
+if (results[0]) {
+$('#address').val(results[0].formatted_address);
+$('#latitude2').val(marker2.getPosition().lat());
+$('#longitude2').val(marker2.getPosition().lng());
+myLatlng2 = new google.maps.LatLng(marker2.getPosition().lat(), marker2.getPosition().lng());
+initialize();
+// infowindow.setContent(results[0].formatted_address);
+// infowindow.open(map, marker2);
+// calcRoute()
+}
+}
+});
+});
+
+google.maps.event.addDomListener(document.getElementById('routebtn'), 'click', calcRoute);
+google.maps.event.addDomListener(document.getElementById('resetroute'), 'click', initialize);
+
+
+}
+function calcRoute() {
+    var start = marker.getPosition();
+    var end = marker2.getPosition();
+    marker.setMap(null);
+    marker2.setMap(null);
+    var request = {
+      origin: start,
+      destination: end,
+      travelMode: google.maps.TravelMode.DRIVING
+    };
+    directionsService.route(request, function(response, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+        directionsDisplay.setDirections(response);
+        directionsDisplay.setMap(map);
+      } else {
+        alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+      }
+    });
+  }
+
+
+
+
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+</head>
+<body>
+<div class="container">
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <p class="navbar-brand">
+	      	<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+	      </p>
+	      <p class="navbar-brand">
+	      	<a href="/home">home</a>
+	      </p>
+	      <p class="navbar-brand">
+	      	<a href="/matches">matches({{ request.session.num }})</a>
+	      </p>
+	    </div>
+	    <p class="navbar-brand navbar-right"><a href="/logout" class="navbar-link">logout</a></p>
+	  </div>
+	</nav>
+	<div class="container">
+		<div class="centerlogo">
+			{% if convo.speaker1.username == user.username %}
+				<h3>you matched with {{ convo.speaker2.username }}!</h3>
+			{% else %}
+				<h3>you matched with {{ convo.speaker1.username }}!</h3>
+			{% endif %}
+		</div>
+		<div class="container">
+			{% for msg in msgs %}
+				<p{% if user.id == msg.sender.id %} class="text-right" {% endif%}>{{ msg.sender.username }} says:</p><p{% if user.id == msg.sender.id %} class="text-right" {% endif%}>{{ msg.content }}</p>
+				<hr>
+			{% endfor %}
+		</div>
+		<form action="/pstmsg" method="post">
+			{% csrf_token %}
+				<input type="hidden" name="tid" value="{{ convo.id }}">
+				<input type="hidden" name="uid" value="{{ request.session.id }}">
+				{% if messages %}
+  					<ul class="messages">
+    					{% for message in messages %}
+    						<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    					{% endfor %}
+  					</ul>
+  				{% endif %}
+				<div class="form-group">
+					<label>message</label>
+					<textarea  name="msg" class="form-control" rows="3"></textarea>
+				</div>
+				<input type="submit" name="submit" class="btn btn-danger form-control" value="send">
+		</form>
+<!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLp92Jf8nFFTmYCRKRD2xOXG2JTuVSOig&callback=initMap"
+  type="text/javascript"></script> -->
+ <div class="container centerlogo">
+ <form action="/savemap" method="post">
+ 	{% csrf_token %}
+	<div id="myMap" class="container"></div>
+	<input id="address" type="text" style="width:600px;"/><br/>
+	<input type="hidden" name="cid" value="{{ convo.id }}">
+	<input type="hidden" name="uid" value="{{ request.session.id }}">
+	<input type="hidden" name ="lat" id="latitude" placeholder="Latitude">
+	<input type="hidden" name ="long" id="longitude" placeholder="Longitude">
+	<input type="hidden" name ="lat2" id="latitude2" placeholder="Latitude">
+	<input type="hidden" name ="long2" id="longitude2" placeholder="Longitude">
+	<input type="button" id="routebtn" class="btn btn-success form-control" value="route" />
+	<input type="button" id="resetroute" class="btn btn-primary form-control" value="reset" />
+	<input type="submit" name="submit" class="btn btn-danger form-control" value="save location">
+</form>
+</div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+

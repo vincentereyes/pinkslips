@@ -118,6 +118,8 @@ class UserManager(models.Manager):
 		convo = Conversation.objects.get(id = postData['cid'])
 		convo.latitude = postData['long']
 		convo.longitude = postData['lat']
+		convo.latitude2 = postData['long2']
+		convo.longitude2 = postData['lat2']
 		convo.save()
 		setter = User.objects.get(id = postData['uid'])
 		Message.objects.create(content = "Location saved by " + setter.username, created_at = datetime.now(), sender_id = postData['uid'], conversation_id = postData['cid'])
@@ -146,6 +148,8 @@ class Conversation(models.Model):
 	speaker2 = models.ForeignKey(User, related_name = "conversations_2")
 	longitude = models.FloatField(default = 37.37541248891094)
 	latitude = models.FloatField(default = -121.91015303558203)
+	longitude2 = models.FloatField(default = 37.3753997)
+	latitude2 = models.FloatField(default = -121.9123471)
 
 class Message(models.Model):
 	"""docstring for Message"""

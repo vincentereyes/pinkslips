@@ -190,9 +190,9 @@ def thread(request, tid):
 				'msgs': msgs
 			}
 			if convo.speaker1 == user:
-				return render(request, 'pinkslips/map.html', context)
+				return render(request, 'pinkslips/marker2test.html', context)
 			elif convo.speaker2 == user:
-				return render(request, 'pinkslips/map.html', context)
+				return render(request, 'pinkslips/marker2test.html', context)
 			else:
 				return redirect('/')
 	return redirect('/matches')
