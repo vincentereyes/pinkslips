@@ -18,6 +18,8 @@
 	      	<a href="/home">home</a>
 	      </p>
 	      <p class="navbar-brand">
+	      	<a href="/profile">back to profile</a>
+	      <p class="navbar-brand">
 	      	<a href="/matches">matches({{ request.session.num }})</a>
 	      </p>
 	    </div>
@@ -40,8 +42,9 @@
 				<form action="/upload" method="post">
 					{% csrf_token %}
 				<div class="form-group">
-					<label>image url</label>
-					<input type="text" name="pic" class="form-control">
+					<label>image url (press upload to update profile picture)</label>
+					<input type="text" class="form-control" value="http://i.ebayimg.com/images/g/pKwAAOSwT5tWGG7C/s-l300.jpg" disabled>
+					<input type="hidden" name="pic" value="http://i.ebayimg.com/images/g/pKwAAOSwT5tWGG7C/s-l300.jpg">
 					<input type="submit" name="submit" class="btn btn-danger form-control" value="upload">
 				</div>
 				</form>

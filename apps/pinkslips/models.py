@@ -114,7 +114,7 @@ class UserManager(models.Manager):
 
 		return errors
 
-	def loc_valid(self, postData):
+	def loc_valid(self, postData): #for saving the location and making a message that a location was saved.
 		convo = Conversation.objects.get(id = postData['cid'])
 		convo.latitude = postData['long']
 		convo.longitude = postData['lat']
