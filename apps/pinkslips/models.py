@@ -10,15 +10,15 @@ class UserManager(models.Manager):
 		name_regex = re.compile(r'^[a-zA-Z0-9]+$')
 		errors = {}
 		if len(postData['uname']) < 4:
-			errors['uname'] = 'username field left blank. 5 or more characters required'
+			errors['uname'] = 'Username must be a minimum of 5 characters'
 		if User.objects.filter(username = postData['uname'].lower()).exists():
-			errors['exists'] = 'username already used'
+			errors['exists'] = 'Username already in use'
 		if not name_regex.match(postData['uname']):
-			errors['letters'] = 'letters and numbers only for usernames please'
+			errors['letters'] = 'Username must only contain letters and numbers'
 		if len(postData['pword']) < 8:
-			errors['pword'] = 'password needs a minimum of 8 characters'
+			errors['pword'] = 'Password must be a minimum of 8 characters'
 		if not postData['pword'] == postData['cpword']:
-			errors['cpword'] = 'passwords dont match'
+			errors['cpword'] = 'Passwords do not match'
 		if len(errors) == 0:
 			pw = bcrypt.hashpw(postData['pword'].encode(), bcrypt.gensalt())
 			newuser = User.objects.create(username = postData['uname'], pword = pw)
@@ -28,27 +28,27 @@ class UserManager(models.Manager):
 	def login_validator(self, postData):
 		errors = {}
 		if len(postData['uname']) < 1:
-			errors['uname'] = 'username field left blank'
+			errors['uname'] = 'Username field was left blank'
 		if len(postData['pword']) < 1:
-			errors['pword'] = 'password field left blank'
+			errors['pword'] = 'Password field was left blank'
 		if len(errors) == 0:
 			if User.objects.filter(username = postData['uname']).exists():
 				user = User.objects.get(username = postData['uname'])
 				if bcrypt.checkpw(postData['pword'].encode(), user.pword.encode()):
 					errors['id'] = user.id
 				else:
-					errors['credentials'] = "Wrong Credentials"
+					errors['credentials'] = "Wrong credentials"
 			else:
-				errors['credentials'] = "Wrong Credentials"
+				errors['credentials'] = "Wrong credentials"
 		return errors
 
 	def msg_validator(self, postData):
 		errors = {}
 		if len(postData['msg']) < 1:
-			errors['msg'] = "message is empty"
+			errors['msg'] = "Message is empty"
 		if len(errors) == 0:
 			Message.objects.create(content = postData['msg'], created_at = datetime.now(), sender_id = postData['uid'], conversation_id = postData['tid'])	
-			errors['success'] = "success"
+			errors['success'] = "Success"
 		return errors
 
 	def update_validator(self, postData):
@@ -57,60 +57,60 @@ class UserManager(models.Manager):
 		user = User.objects.get(id = postData['uid'])
 		if len(postData['desc']) > 0:
 			if len(postData['desc']) < 10:
-				errors['desc'] = "desc needs more than 10 characters"
+				errors['desc'] = "Description must be a minimum of 10 characters"
 			else:
 				user.desc = postData['desc']
 				user.save()
-				errors['desc'] = "description successfully saved"
+				errors['desc'] = "Description successfully saved"
 
 		if len(postData['year']) > 0:
 			if int(postData['year']) > 2019:
-				errors['year'] = "you can't have a car from the future or past"
+				errors['year'] = "Are you a time traveler?"
 			elif int(postData['year']) < 1940:
-				errors['year'] = "are you sure that car has an internal combustion engine?"
+				errors['year'] = "Are you sure that car has an internal combustion engine?"
 			else:
 				user.year = int(postData['year'])
 				user.save()
-				errors['year'] = "year successfully saved"
+				errors['year'] = "Year successfully saved"
 
 		if len(postData['model']) > 0:
 			if len(postData['model']) < 2:
-				errors['model'] = "invalid model"
+				errors['model'] = "Invalid model"
 			else:
 				user.model = postData['model']
 				user.save()
-				errors['model'] = "model successfully saved"
+				errors['model'] = "Model successfully saved"
 
 		if len(postData['make']) > 0:
 			if len(postData['make']) < 3:
-				errors['make'] = "invalid make"
+				errors['make'] = "Invalid make"
 			else:
 				user.make = postData['make']
 				user.save()
-				errors['make'] = "make successfully saved"
+				errors['make'] = "Make successfully saved"
 
 		if len(postData['power']) > 0:
 			if int(postData['power']) < 100:
-				errors['power'] = "u seriously in this app with that power?"
+				errors['power'] = "U seriously in this app with that power?"
 			elif int(postData['power']) > 2000:
-				errors['power'] = "dont you have a different car with usable power?"
+				errors['power'] = "You car is too op"
 			else:
 				user.power = int(postData['power'])
 				user.save()
-				errors['power'] = "power successfully saved"
+				errors['power'] = "Power successfully saved"
 
 		if len(postData['weight']) > 0:
 			if int(postData['weight']) < 1:
-				errors['weight'] = "invalid weight"
+				errors['weight'] = "Invalid weight"
 			else:
 				user.weight = postData['weight']
 				user.save()
-				errors['weight'] = "weight successfully saved"
+				errors['weight'] = "Weight successfully saved"
 
 		if not postData['dtrain'] == "choose":
 			user.dtrain = postData['dtrain']
 			user.save()
-			errors['dtrain'] = "drivetrain successfully saved"
+			errors['dtrain'] = "Drivetrain successfully saved"
 
 		return errors
 
